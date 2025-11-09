@@ -1,0 +1,381 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>ATMH Innov — UTRS+</title>
+
+  <!-- Google Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- QR generation library (client-side) -->
+  <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
+
+  <style>
+    :root{
+      --bg:#07060a;            /* deep dark */
+      --card:#0f0d12;          /* slightly lighter */
+      --muted:#9aa0a6;
+      --gold:#f1c40f;          /* accent (replace if you prefer other gold) */
+      --glass: rgba(255,255,255,0.03);
+      --radius:14px;
+      --max-width:1100px;
+      --ff: 'Inter', system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family:var(--ff);
+      background:linear-gradient(180deg,var(--bg) 0%, #0b0b0f 100%);
+      color:#e8e8ea;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      line-height:1.5;
+    }
+
+    /* Layout */
+    .container{max-width:var(--max-width);margin:0 auto;padding:28px;}
+    header{
+      position:sticky;top:0;z-index:40;
+      backdrop-filter: blur(6px);
+      background:linear-gradient(180deg, rgba(7,6,10,0.5), rgba(7,6,10,0.45));
+      border-bottom:1px solid rgba(255,255,255,0.03);
+    }
+    .nav{
+      display:flex;align-items:center;justify-content:space-between;gap:18px;
+      padding:12px 0;
+    }
+    .brand{display:flex;align-items:center;gap:12px}
+    .brand img{height:44px}
+    .brand h1{font-size:18px;margin:0;font-weight:700;letter-spacing:1px;color:var(--gold)}
+
+    nav ul{display:flex;gap:16px;list-style:none;margin:0;padding:0}
+    nav a{color:var(--muted);text-decoration:none;font-weight:600;font-size:14px}
+    nav a:hover{color:#fff}
+
+    /* Hero */
+    .hero{display:grid;grid-template-columns:1fr 420px;gap:32px;align-items:center;padding:56px 0}
+    .hero-left h2{font-size:38px;margin:0 0 14px;color:#fff;line-height:1.02}
+    .hero-left p{color:var(--muted);margin:0 0 22px}
+    .cta-row{display:flex;gap:12px;flex-wrap:wrap}
+    .btn{
+      background:var(--gold);color:#0b0b0b;padding:12px 18px;border-radius:10px;border:0;font-weight:700;cursor:pointer;
+      box-shadow:0 6px 20px rgba(241,196,15,0.08);
+    }
+    .btn.secondary{background:transparent;color:var(--gold);border:1px solid rgba(241,196,15,0.12)}
+
+    .hero-right{
+      background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+      border-radius:14px;padding:22px;border:1px solid rgba(255,255,255,0.03);
+      box-shadow: 0 10px 30px rgba(2,2,6,0.6);
+    }
+    .card-title{font-weight:700;margin:0 0 12px;color:#fff}
+    .small{font-size:13px;color:var(--muted)}
+
+    /* Sections */
+    section{padding:48px 0;border-top:1px dashed rgba(255,255,255,0.02)}
+    .grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+    .feature{
+      background:var(--card);padding:18px;border-radius:12px;border:1px solid rgba(255,255,255,0.02);
+    }
+    .feature h4{margin:0 0 8px;color:var(--gold)}
+    .feature p{margin:0;color:var(--muted);font-size:14px}
+
+    /* Contact */
+    .contact-grid{display:grid;grid-template-columns:1fr 360px;gap:22px}
+    form{display:flex;flex-direction:column;gap:12px}
+    input,textarea{
+      background:var(--glass);border:1px solid rgba(255,255,255,0.04);padding:12px;border-radius:8px;color:#fff;
+      font-size:14px;outline:none;
+    }
+    textarea{min-height:120px;resize:vertical}
+    .muted{color:var(--muted);font-size:14px}
+
+    /* QR controls */
+    .qr-box{display:flex;flex-direction:column;gap:10px;align-items:center;justify-content:center;padding:18px}
+    #qrcode{background:transparent;padding:12px;border-radius:8px}
+    .qr-input-row{display:flex;gap:8px;width:100%}
+
+    /* Footer */
+    footer{padding:24px 0;text-align:center;color:var(--muted);font-size:13px}
+
+    /* Responsive */
+    @media (max-width:900px){
+      .hero{grid-template-columns:1fr;gap:20px;padding:36px 0}
+      .container{padding:18px}
+      nav ul{display:none}
+      .hero-right{order:2}
+      .grid-3{grid-template-columns:1fr}
+      .contact-grid{grid-template-columns:1fr}
+    }
+
+    /* subtle helpers */
+    .pill{display:inline-block;padding:6px 10px;border-radius:999px;background:rgba(241,196,15,0.08);color:var(--gold);font-weight:700;font-size:13px}
+    .kpi{display:flex;gap:12px;align-items:center}
+    .kpi strong{font-size:22px;color:#fff}
+  </style>
+</head>
+
+<body>
+  <header>
+    <div class="container nav">
+      <div class="brand">
+        <!-- Put your logo image in same folder as index.html and name it logo.png -->
+        <img src="logo.png" alt="ATMH Innov logo" onerror="this.style.display='none'">
+        <h1>ATMH Innov</h1>
+      </div>
+
+      <nav>
+        <ul>
+          <li><a href="#about">About</a></li>
+          <li><a href="#features">Features</a></li>
+          <li><a href="#benefits">Benefits</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <!-- HERO -->
+    <section class="hero" id="home">
+      <div class="hero-left">
+        <div class="pill">UTRS+ — Unified Transaction Reconciliation System</div>
+        <h2>Smarter reconciliation. Tax-ready records. Faster decisions.</h2>
+        <p>UTRS+ collects payments from banks, POS and mobile apps, automatically matches them to invoices using machine learning and prepares tax-ready accounting so SMEs spend less time reconciling and more time growing.</p>
+
+        <div class="cta-row">
+          <button class="btn" onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'})">Request Demo</button>
+          <button class="btn secondary" onclick="document.getElementById('qr-url').focus()">Generate QR</button>
+        </div>
+
+        <div style="margin-top:18px" class="kpi">
+          <div>
+            <div class="small">Typical Reconciliation Time</div>
+            <strong>~2 hours</strong>
+          </div>
+          <div style="margin-left:18px">
+            <div class="small">Target</div>
+            <strong>SMEs in Africa</strong>
+          </div>
+        </div>
+      </div>
+
+      <div class="hero-right">
+        <div style="display:flex;align-items:center;gap:14px;margin-bottom:12px">
+          <div style="width:64px;height:64px;border-radius:12px;background:rgba(241,196,15,0.08);display:flex;align-items:center;justify-content:center;font-weight:800;color:var(--gold)">UT</div>
+          <div>
+            <div class="card-title">UTRS+ — Reconciliation + Tax Assist</div>
+            <div class="small">Automated matching • Offline-first • QuickBooks/Sage/Xero export</div>
+          </div>
+        </div>
+
+        <p class="muted">Enter a URL below and generate a QR code for your product demo, app page, or business profile. This QR is client-side only and generated instantly in your browser.</p>
+
+        <!-- QR generator -->
+        <div style="margin-top:12px">
+          <div class="qr-box">
+            <div class="qr-input-row" style="width:100%">
+              <input id="qr-url" placeholder="https://your-demo-link.example" aria-label="QR URL" />
+              <button class="btn" id="gen-qr">Generate</button>
+            </div>
+            <div id="qrcode" aria-hidden="true" style="margin-top:12px"></div>
+            <div class="small muted">Tip: Use this to quickly share your demo or site.</div>
+            <button id="download-qr" class="btn secondary" style="margin-top:8px">Download PNG</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ABOUT -->
+    <section id="about">
+      <h3 style="margin:0 0 12px">About UTRS+</h3>
+      <p class="muted">UTRS+ combines automated reconciliation with intelligent tax insights to ensure both financial accuracy and tax compliance for SMEs that receive payments by banks, POS terminals and mobile apps.</p>
+
+      <div style="margin-top:18px" class="grid-3">
+        <div class="feature">
+          <h4>Problem</h4>
+          <p>SMEs receive payments across many channels. Manual reconciliation is slow and error-prone, leading to unreliable tax reporting.</p>
+        </div>
+        <div class="feature">
+          <h4>Solution</h4>
+          <p>UTRS+ centralizes transaction feeds, matches payments with invoices using ML, identifies tax impacts and exports reconciled data to accounting software.</p>
+        </div>
+        <div class="feature">
+          <h4>Vision</h4>
+          <p>To be Africa’s most trusted platform for intelligent financial reconciliation and tax accuracy.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- FEATURES -->
+    <section id="features">
+      <h3 style="margin:0 0 12px">Core Features</h3>
+      <div class="grid-3" style="margin-top:16px">
+        <div class="feature">
+          <h4>Real-time Dashboard</h4>
+          <p>Consolidate payments from all channels into a single dashboard with live reconciliation status.</p>
+        </div>
+        <div class="feature">
+          <h4>Smart Tax Assist</h4>
+          <p>Flags tax-relevant transactions and generates pre-filled tax forms based on verified data.</p>
+        </div>
+        <div class="feature">
+          <h4>Offline-first</h4>
+          <p>Works without constant internet — syncs automatically when connected.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- BENEFITS -->
+    <section id="benefits">
+      <h3 style="margin:0 0 12px">Benefits</h3>
+      <div class="grid-3" style="margin-top:16px">
+        <div class="feature">
+          <h4>Faster Reconciliation</h4>
+          <p>Reduce reconciliation from days to hours using automation and ML.</p>
+        </div>
+        <div class="feature">
+          <h4>Tax-ready Records</h4>
+          <p>Accurate records feed directly into tax computations and reporting.</p>
+        </div>
+        <div class="feature">
+          <h4>Audit-friendly</h4>
+          <p>Transparent, reconciled records make audits faster and less disruptive.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section id="contact">
+      <h3 style="margin:0 0 12px">Contact / Request Demo</h3>
+      <div class="contact-grid" style="margin-top:16px">
+        <div>
+          <p class="muted">Fill the form and we'll get back to you with a demo link and next steps.</p>
+
+          <form id="contact-form" onsubmit="handleContact(event)">
+            <input type="text" id="name" placeholder="Your name" required />
+            <input type="email" id="email" placeholder="Your email" required />
+            <input type="text" id="company" placeholder="Company (optional)" />
+            <textarea id="message" placeholder="Tell us a bit about your needs" required></textarea>
+
+            <div style="display:flex;gap:10px;align-items:center">
+              <button class="btn" type="submit">Send Request</button>
+              <button class="btn secondary" type="button" onclick="clearForm()">Clear</button>
+            </div>
+            <div id="contact-feedback" class="small muted" aria-live="polite" style="margin-top:8px"></div>
+          </form>
+        </div>
+
+        <aside style="display:flex;flex-direction:column;gap:12px;align-items:center;justify-content:center">
+          <div style="background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));padding:18px;border-radius:12px; width:100%;text-align:center;border:1px solid rgba(255,255,255,0.02)">
+            <strong style="display:block;font-size:18px">ATMH Innov</strong>
+            <div class="muted" style="margin:8px 0">Unified Transaction Reconciliation System (UTRS+)</div>
+            <div class="small muted">Empowering SMEs with clarity, compliance, and confidence.</div>
+          </div>
+
+          <div style="text-align:center" class="muted small">Or email us directly at:
+            <div style="margin-top:8px"><a href="mailto:info@atmhinnov.example" style="color:var(--gold);text-decoration:none">info@atmhinnov.example</a></div>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <footer>
+      <div class="small muted">© <span id="yr"></span> ATMH Innov — UTRS+. Built for your entrepreneurship project.</div>
+    </footer>
+  </main>
+
+  <script>
+    // Set year
+    document.getElementById('yr').textContent = new Date().getFullYear();
+
+    // Smooth link behaviour for header links
+    document.querySelectorAll('nav a').forEach(a=>{
+      a.addEventListener('click', (e)=>{
+        e.preventDefault();
+        const id = a.getAttribute('href').slice(1);
+        document.getElementById(id).scrollIntoView({behavior:'smooth', block:'start'});
+      });
+    });
+
+    // QR CODE: generate + download
+    const qrUrlInput = document.getElementById('qr-url');
+    const genBtn = document.getElementById('gen-qr');
+    const qrContainer = document.getElementById('qrcode');
+    const downloadBtn = document.getElementById('download-qr');
+
+    async function generateQRCode(text) {
+      // Clear previous
+      qrContainer.innerHTML = '';
+      try {
+        // uses qrcode.min.js (https://github.com/soldair/node-qrcode)
+        await QRCode.toCanvas(document.createElement('canvas'), text, {margin:1, scale:6})
+          .then(canvas => {
+            canvas.id = 'qr-canvas';
+            qrContainer.appendChild(canvas);
+          });
+      } catch (err) {
+        qrContainer.textContent = 'Failed to generate QR';
+        console.error(err);
+      }
+    }
+
+    genBtn.addEventListener('click', ()=>{
+      const url = (qrUrlInput.value || '').trim();
+      if(!url){
+        qrUrlInput.focus();
+        return;
+      }
+      generateQRCode(url);
+    });
+
+    // Press Enter to generate
+    qrUrlInput.addEventListener('keydown', (e)=>{
+      if(e.key === 'Enter'){ e.preventDefault(); genBtn.click(); }
+    });
+
+    downloadBtn.addEventListener('click', ()=>{
+      const canvas = document.querySelector('#qrcode canvas, #qrcode #qr-canvas');
+      if(!canvas) return alert('Please generate the QR code first.');
+      const png = canvas.toDataURL('image/png');
+      const a = document.createElement('a');
+      a.href = png;
+      a.download = 'utrs-qr.png';
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+    });
+
+    // Contact form: simple mailto fallback and local visual feedback.
+    function handleContact(e){
+      e.preventDefault();
+      const name = document.getElementById('name').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const company = document.getElementById('company').value.trim();
+      const message = document.getElementById('message').value.trim();
+
+      // Visual feedback
+      const feedback = document.getElementById('contact-feedback');
+      feedback.textContent = 'Preparing message...';
+
+      // Create mailto fallback
+      const subject = encodeURIComponent(`UTRS+ Demo Request from ${name}`);
+      const body = encodeURIComponent(`Name: ${name}\nEmail: ${email}\nCompany: ${company}\n\nMessage:\n${message}`);
+      // Try to open user's email client
+      window.location.href = `mailto:info@atmhinnov.example?subject=${subject}&body=${body}`;
+
+      // Update feedback
+      setTimeout(()=>{
+        feedback.textContent = 'If your email client did not open, send a message to info@atmhinnov.example';
+      }, 600);
+    }
+
+    function clearForm(){
+      document.getElementById('contact-form').reset();
+      document.getElementById('contact-feedback').textContent = '';
+    }
+  </script>
+</body>
+  </html>
